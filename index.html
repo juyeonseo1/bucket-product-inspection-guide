@@ -3,25 +3,25 @@
   @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700&family=Noto+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@500;600&display=swap');
 
   :root{
-    --paper:#F6F7F9;
+    --paper:#F5F6F8;
     --card:#FFFFFF;
-    --ink:#1B222C;
-    --muted:#6B7280;
-    --line:#E3E6EC;
-    --accent:#2B3F6B;
-    --accent-soft:#E8ECF5;
+    --ink:#17181C;
+    --muted:#777B84;
+    --line:#E5E6E9;
+    --accent:#0D35C7;
+    --accent-soft:#EFF2FF;
     --ok:#1E7A4C;
     --ok-bg:#E6F4EC;
     --bad:#B3261E;
     --bad-bg:#FBEAE8;
     --warn:#8A5A12;
     --warn-bg:#FBF1DA;
-    --dot-cert:#2B3F6B;
+    --dot-cert:#0D35C7;
     --dot-sales:#8C2F2A;
     --dot-image:#9C6B10;
     --dot-etc:#5B3A78;
     --serif:'Noto Serif KR', serif;
-    --sans:'Noto Sans KR', -apple-system, 'Apple SD Gothic Neo', system-ui, sans-serif;
+    --sans:'Noto Sans KR', Pretendard, 'Apple SD Gothic Neo', Arial, sans-serif;
     --mono:'JetBrains Mono', ui-monospace, 'SFMono-Regular', monospace;
   }
   @media (prefers-color-scheme: dark){
@@ -31,15 +31,15 @@
       --ink:#E8EAED;
       --muted:#9AA1AC;
       --line:#2B2F38;
-      --accent:#8CA1D6;
-      --accent-soft:#232B3D;
+      --accent:#6F9CFF;
+      --accent-soft:#182446;
       --ok:#4FBE85;
       --ok-bg:#163325;
       --bad:#E5695F;
       --bad-bg:#3A1D1A;
       --warn:#D8A548;
       --warn-bg:#3A2E14;
-      --dot-cert:#8CA1D6;
+      --dot-cert:#6F9CFF;
       --dot-sales:#D98177;
       --dot-image:#D8A548;
       --dot-etc:#B79BD1;
@@ -51,15 +51,15 @@
     --ink:#E8EAED;
     --muted:#9AA1AC;
     --line:#2B2F38;
-    --accent:#8CA1D6;
-    --accent-soft:#232B3D;
+    --accent:#6F9CFF;
+    --accent-soft:#182446;
     --ok:#4FBE85;
     --ok-bg:#163325;
     --bad:#E5695F;
     --bad-bg:#3A1D1A;
     --warn:#D8A548;
     --warn-bg:#3A2E14;
-    --dot-cert:#8CA1D6;
+    --dot-cert:#6F9CFF;
     --dot-sales:#D98177;
     --dot-image:#D8A548;
     --dot-etc:#B79BD1;
@@ -253,9 +253,10 @@
   .item{
     background:var(--card);
     border:1px solid var(--line);
-    border-radius:12px;
+    border-radius:10px;
     padding:1.25rem 1.5rem;
     margin-bottom:1rem;
+    box-shadow:0 1px 3px rgba(0,0,0,.06);
   }
   .item[hidden]{display:none;}
   .itemHead{
@@ -751,7 +752,7 @@
           </div>
         </div>
         <div class="itemBody">
-          <h4 class="subHead">캐릭터 라이선스 확인</h4>
+          <h4 class="subHead"><font face="Noto Sans KR, sans-serif">캐릭터 라이선스 확인 - 아래 예시만을 대상으로 하고, 애매한 내용은 관리자 리포트</font></h4>
           <div class="tableWrap">
             <table class="licenseTable">
               <tr><th>브랜드/그룹</th><th>대표 캐릭터·작품</th></tr>
