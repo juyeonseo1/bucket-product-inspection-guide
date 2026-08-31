@@ -1,0 +1,1006 @@
+<title>상품 검수 기준 가이드</title>
+<style id="guide-style">
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700&family=Noto+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@500;600&display=swap');
+
+  :root{
+    --paper:#F6F7F9;
+    --card:#FFFFFF;
+    --ink:#1B222C;
+    --muted:#6B7280;
+    --line:#E3E6EC;
+    --accent:#2B3F6B;
+    --accent-soft:#E8ECF5;
+    --ok:#1E7A4C;
+    --ok-bg:#E6F4EC;
+    --bad:#B3261E;
+    --bad-bg:#FBEAE8;
+    --warn:#8A5A12;
+    --warn-bg:#FBF1DA;
+    --dot-cert:#2B3F6B;
+    --dot-sales:#8C2F2A;
+    --dot-image:#9C6B10;
+    --dot-etc:#5B3A78;
+    --serif:'Noto Serif KR', serif;
+    --sans:'Noto Sans KR', -apple-system, 'Apple SD Gothic Neo', system-ui, sans-serif;
+    --mono:'JetBrains Mono', ui-monospace, 'SFMono-Regular', monospace;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#14161B;
+      --card:#1C1F26;
+      --ink:#E8EAED;
+      --muted:#9AA1AC;
+      --line:#2B2F38;
+      --accent:#8CA1D6;
+      --accent-soft:#232B3D;
+      --ok:#4FBE85;
+      --ok-bg:#163325;
+      --bad:#E5695F;
+      --bad-bg:#3A1D1A;
+      --warn:#D8A548;
+      --warn-bg:#3A2E14;
+      --dot-cert:#8CA1D6;
+      --dot-sales:#D98177;
+      --dot-image:#D8A548;
+      --dot-etc:#B79BD1;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#14161B;
+    --card:#1C1F26;
+    --ink:#E8EAED;
+    --muted:#9AA1AC;
+    --line:#2B2F38;
+    --accent:#8CA1D6;
+    --accent-soft:#232B3D;
+    --ok:#4FBE85;
+    --ok-bg:#163325;
+    --bad:#E5695F;
+    --bad-bg:#3A1D1A;
+    --warn:#D8A548;
+    --warn-bg:#3A2E14;
+    --dot-cert:#8CA1D6;
+    --dot-sales:#D98177;
+    --dot-image:#D8A548;
+    --dot-etc:#B79BD1;
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--sans);
+    line-height:1.5;
+  }
+  h1,h2,h3,h4{font-family:var(--serif); text-wrap:balance; margin:0;}
+
+  .layout{
+    display:grid;
+    grid-template-columns:250px 1fr;
+    min-height:100vh;
+    align-items:start;
+  }
+
+  .sidebar{
+    position:sticky;
+    top:0;
+    height:100vh;
+    overflow-y:auto;
+    padding:1.5rem 1rem;
+    border-right:1px solid var(--line);
+    display:flex;
+    flex-direction:column;
+    gap:1.5rem;
+  }
+  .brand{padding:0 .5rem;}
+  .brand .eyebrow{
+    font-family:var(--mono);
+    font-size:.72rem;
+    letter-spacing:.08em;
+    color:var(--muted);
+    text-transform:uppercase;
+  }
+  .brand h1{font-size:1.3rem; margin-top:.35rem;}
+  .brand .sub{color:var(--muted); font-size:.85rem; margin-top:.5rem;}
+
+  .tabs{display:flex; flex-direction:column; gap:.25rem;}
+  .tab{
+    display:flex;
+    align-items:center;
+    gap:.6rem;
+    width:100%;
+    text-align:left;
+    background:none;
+    border:none;
+    border-radius:8px;
+    padding:.6rem .65rem;
+    font:inherit;
+    font-size:.92rem;
+    color:var(--ink);
+    cursor:pointer;
+  }
+  .tab:hover{background:var(--accent-soft);}
+  .tab.active{background:var(--accent-soft); font-weight:700; color:var(--accent);}
+  .tab .dot{
+    width:.55rem; height:.55rem; border-radius:50%;
+    background:var(--dot, var(--accent));
+    flex-shrink:0;
+  }
+  .tab .label{flex:1;}
+  .tab .count{
+    font-family:var(--mono);
+    font-size:.75rem;
+    color:var(--muted);
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:999px;
+    padding:.05rem .45rem;
+  }
+  .tab.active .count{color:var(--accent); border-color:var(--accent);}
+
+  .main{padding:2rem 2.5rem 4rem; max-width:900px;}
+
+  .toolbar{
+    position:sticky;
+    top:0;
+    background:var(--paper);
+    padding:.75rem 0 1rem;
+    display:flex;
+    align-items:center;
+    gap:1rem;
+    flex-wrap:wrap;
+    z-index:5;
+  }
+  #search{
+    flex:1;
+    min-width:220px;
+    font:inherit;
+    font-size:.95rem;
+    padding:.6rem .9rem;
+    border:1px solid var(--line);
+    border-radius:10px;
+    background:var(--card);
+    color:var(--ink);
+  }
+  #search:focus{outline:2px solid var(--accent); outline-offset:1px;}
+  .lastUpdated{font-family:var(--mono); font-size:.78rem; color:var(--muted); white-space:nowrap;}
+
+  .btn{
+    font:inherit;
+    font-size:.85rem;
+    font-weight:600;
+    padding:.45rem .9rem;
+    border-radius:8px;
+    border:1px solid var(--line);
+    background:var(--card);
+    color:var(--ink);
+    cursor:pointer;
+  }
+  .btn:hover{border-color:var(--accent);}
+  .btn:focus-visible{outline:2px solid var(--accent); outline-offset:2px;}
+  .btn.primary{background:var(--accent); border-color:var(--accent); color:var(--paper);}
+  .btn[hidden]{display:none;}
+  .editControls{display:flex; gap:.5rem; margin-left:auto;}
+
+  .editHint, .readOnlyHint{
+    font-size:.85rem;
+    margin:0 0 1rem;
+    padding:.55rem .9rem;
+    border-radius:8px;
+  }
+  .editHint{color:var(--accent); background:var(--accent-soft);}
+  .readOnlyHint{color:var(--muted); background:var(--card); border:1px solid var(--line);}
+  .editHint[hidden], .readOnlyHint[hidden]{display:none;}
+
+  .catPanel{margin-bottom:2.5rem;}
+  .catPanel[hidden]{display:none;}
+  .catPanel h2{
+    font-size:1.05rem;
+    display:flex;
+    align-items:center;
+    gap:.6rem;
+    margin-bottom:1rem;
+    padding-bottom:.6rem;
+    border-bottom:1px solid var(--line);
+  }
+  .catPanel h2 .dot{width:.7rem; height:.7rem; border-radius:50%; background:var(--dot);}
+
+  .item{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:1.25rem 1.5rem;
+    margin-bottom:1rem;
+  }
+  .item[hidden]{display:none;}
+  .itemHead{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:.75rem;
+    flex-wrap:wrap;
+    margin-bottom:.85rem;
+  }
+  .itemHead h3{font-size:1.1rem;}
+  .itemHeadRight{display:flex; align-items:center; gap:.6rem; flex-wrap:wrap;}
+  .itemLinks{display:flex; gap:.4rem; flex-wrap:wrap;}
+
+  .tag{
+    display:inline-flex;
+    align-items:center;
+    padding:.08rem .5rem;
+    border-radius:999px;
+    font-size:.76rem;
+    font-weight:700;
+    font-family:var(--mono);
+    letter-spacing:.02em;
+    white-space:nowrap;
+  }
+  .tag.ok{color:var(--ok); background:var(--ok-bg);}
+  .tag.bad{color:var(--bad); background:var(--bad-bg);}
+  .tag.warn{color:var(--warn); background:var(--warn-bg);}
+
+  .linkTodo{
+    display:inline-flex;
+    align-items:center;
+    gap:.3rem;
+    font-size:.76rem;
+    font-family:var(--mono);
+    color:var(--warn);
+    background:var(--warn-bg);
+    padding:.08rem .55rem;
+    border-radius:999px;
+    white-space:nowrap;
+  }
+
+  .deleteBtn{
+    font:inherit;
+    font-size:.75rem;
+    font-family:var(--mono);
+    color:var(--bad);
+    background:var(--bad-bg);
+    border:none;
+    border-radius:999px;
+    padding:.2rem .6rem;
+    cursor:pointer;
+  }
+  .deleteBtn[hidden]{display:none;}
+  .deleteBtn.confirm{background:var(--bad); color:var(--paper);}
+
+  .note{color:var(--muted); font-size:.92em;}
+
+  .rules{margin:0; padding-left:1.15rem; display:flex; flex-direction:column; gap:.55rem;}
+  .rules li{line-height:1.65;}
+  .rules ul{margin:.45rem 0 0; padding-left:1.15rem; display:flex; flex-direction:column; gap:.45rem;}
+
+  .callout{
+    border-left:3px solid var(--accent);
+    background:var(--accent-soft);
+    padding:.7rem 1rem;
+    border-radius:0 8px 8px 0;
+    margin-bottom:1rem;
+    font-size:.93rem;
+  }
+  .callout.bad{border-color:var(--bad); background:var(--bad-bg);}
+
+  .example{
+    margin-top:.65rem;
+    padding:.55rem .8rem;
+    background:var(--paper);
+    border:1px dashed var(--line);
+    border-radius:8px;
+    font-size:.9rem;
+    color:var(--muted);
+  }
+  .exampleLabel{font-weight:700; color:var(--ink); margin-right:.4rem; font-family:var(--mono); font-size:.8rem;}
+
+  .subHead{
+    font-size:.98rem;
+    margin:1.1rem 0 .5rem;
+    padding-top:1rem;
+    border-top:1px dashed var(--line);
+  }
+  .subHead:first-of-type{border-top:none; padding-top:0; margin-top:0;}
+
+  .compareGrid{display:grid; grid-template-columns:1fr 1fr; gap:1.25rem; margin-top:.5rem;}
+  .compareCol h4{
+    font-size:.85rem;
+    font-family:var(--mono);
+    margin-bottom:.6rem;
+    display:inline-flex;
+    align-items:center;
+    padding:.15rem .55rem;
+    border-radius:6px;
+  }
+  .compareCol.remove h4{color:var(--bad); background:var(--bad-bg);}
+  .compareCol.keep h4{color:var(--ok); background:var(--ok-bg);}
+  .compareCol ul{margin:0; padding-left:1.1rem; display:flex; flex-direction:column; gap:.5rem; font-size:.92rem;}
+
+  .tableWrap{overflow-x:auto; margin-top:.6rem; border:1px solid var(--line); border-radius:10px;}
+  table.licenseTable{border-collapse:collapse; width:100%; font-size:.92rem;}
+  table.licenseTable th, table.licenseTable td{
+    text-align:left; padding:.55rem .8rem; border-bottom:1px solid var(--line); vertical-align:top;
+  }
+  table.licenseTable th{
+    font-family:var(--mono); font-size:.78rem; color:var(--muted); font-weight:600;
+    background:var(--paper);
+  }
+  table.licenseTable tr:last-child td{border-bottom:none;}
+
+  .addItemBtn{
+    display:block;
+    width:100%;
+    margin-top:.5rem;
+    font:inherit;
+    font-size:.9rem;
+    font-weight:600;
+    padding:.7rem;
+    border-radius:10px;
+    border:1px dashed var(--line);
+    background:none;
+    color:var(--muted);
+    cursor:pointer;
+  }
+  .addItemBtn:hover{border-color:var(--accent); color:var(--accent);}
+  .addItemBtn[hidden]{display:none;}
+  .tabs .addItemBtn{font-size:.82rem; padding:.55rem; margin-top:.25rem;}
+
+  .catLabel, .tab .label{outline-offset:2px;}
+
+  .layout.editing [contenteditable="true"]{
+    outline:1px dashed var(--line);
+    outline-offset:4px;
+    border-radius:6px;
+    cursor:text;
+  }
+  .layout.editing [contenteditable="true"]:focus{outline-color:var(--accent);}
+
+  .noResults{color:var(--muted); font-size:.92rem; padding:1rem 0;}
+  .noResults[hidden]{display:none;}
+
+  .toast{
+    position:fixed;
+    bottom:1.5rem;
+    left:50%;
+    transform:translateX(-50%);
+    background:var(--ink);
+    color:var(--paper);
+    padding:.7rem 1.1rem;
+    border-radius:10px;
+    font-size:.85rem;
+    z-index:20;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .2s ease;
+    max-width:80vw;
+    text-align:center;
+  }
+  .toast.show{opacity:1;}
+
+  @media (max-width:760px){
+    .layout{grid-template-columns:1fr;}
+    .sidebar{
+      position:static;
+      height:auto;
+      flex-direction:row;
+      overflow-x:auto;
+      overflow-y:hidden;
+      border-right:none;
+      border-bottom:1px solid var(--line);
+      padding:1rem;
+      gap:1rem;
+    }
+    .brand{display:none;}
+    .tabs{flex-direction:row;}
+    .tab{width:auto; white-space:nowrap;}
+    .main{padding:1.25rem 1.25rem 3rem;}
+    .editControls{margin-left:0;}
+  }
+
+  @media (prefers-reduced-motion: no-preference){
+    .tab, .item, .btn{transition:background-color .15s ease, border-color .15s ease;}
+  }
+</style>
+
+<div class="layout">
+  <nav class="sidebar">
+    <div class="brand">
+      <div class="eyebrow">Product Review</div>
+      <h1>상품 검수 기준 가이드</h1>
+      <p class="sub">상품 등록 시 확인하는 인증·판매제한·이미지·라이선스 기준. 항목은 계속 추가됩니다.</p>
+    </div>
+    <div class="tabs" id="tabs">
+      <button class="tab active" data-cat="all"><span class="dot" style="--dot:var(--accent)"></span><span class="label">전체</span><span class="count">10</span></button>
+      <button class="tab" data-cat="cert"><span class="dot" style="--dot:var(--dot-cert)"></span><span class="label">인증, 규제 대상</span><span class="count">4</span></button>
+      <button class="tab" data-cat="sales"><span class="dot" style="--dot:var(--dot-sales)"></span><span class="label">판매 제한</span><span class="count">1</span></button>
+      <button class="tab" data-cat="image"><span class="dot" style="--dot:var(--dot-image)"></span><span class="label">이미지 정책 위반</span><span class="count">4</span></button>
+      <button class="tab" data-cat="etc"><span class="dot" style="--dot:var(--dot-etc)"></span><span class="label">기타</span><span class="count">1</span></button>
+      <button id="addCatBtn" class="addItemBtn" hidden>+ 카테고리 추가</button>
+    </div>
+  </nav>
+
+  <main class="main">
+    <div class="toolbar">
+      <input type="search" id="search" placeholder="항목 검색 (예: KC, 도검, GIF, 라이선스)">
+      <span class="lastUpdated">최종 수정 2026-08-31</span>
+      <div class="editControls">
+        <button id="editToggle" class="btn">✏️ 편집</button>
+        <button id="saveBtn" class="btn primary" hidden>저장</button>
+        <button id="cancelBtn" class="btn" hidden>취소</button>
+      </div>
+    </div>
+    <p id="editHint" class="editHint" hidden>편집 모드예요. 제목·내용을 클릭해서 바로 고치고, 다 되면 저장을 눌러주세요. 취소하면 마지막 저장 상태로 되돌아가요.</p>
+    <p id="readOnlyHint" class="readOnlyHint" hidden>이 보기는 읽기 전용이에요. 편집 권한이 있는 사람만 저장할 수 있어요.</p>
+
+    <section class="catPanel" data-cat="cert">
+      <h2><span class="dot" style="--dot:var(--dot-cert)"></span><span class="catLabel">인증, 규제 대상</span></h2>
+
+      <article class="item" data-key="cert-1">
+        <div class="itemHead">
+          <h3>KC 어린이제품</h3>
+          <div class="itemHeadRight">
+            <div class="itemLinks"><span class="linkTodo">🔗 인증대상 정의 링크 필요</span></div>
+            <button class="deleteBtn" hidden>삭제</button>
+          </div>
+        </div>
+        <div class="itemBody">
+          <ul class="rules">
+            <li>어린이제품 인증 대상 여부를 확인한다. <span class="note">(정의)</span></li>
+            <li>인증 대상인데 인증정보가 없는 경우 → <span class="tag bad">거절</span></li>
+            <li>인증번호와 상품 모델명이 불일치하거나 인증이 유효하지 않은 경우 → <span class="tag bad">거절</span></li>
+            <li>상세페이지와 상품정보제공고시 간 인증정보가 상이한 경우 <span class="note">(둘 중 한개만 맞다면, 어떤 항목에 기재된 정보가 잘못되었는지도 표기)</span> → <span class="tag bad">거절</span></li>
+            <li>상세페이지 또는 상품정보제공고시 중 한 곳에만 정확히 기재되어 있으면 <span class="tag ok">승인</span> <span class="note">(상세페이지 참조 등으로 기입한 경우에도 상세페이지에 잘 기입되어있다면 승인 가능)</span></li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="item" data-key="cert-2">
+        <div class="itemHead">
+          <h3>KC 어린이제품 – 공급자적합성확인대상 여부</h3>
+          <div class="itemHeadRight">
+            <button class="deleteBtn" hidden>삭제</button>
+          </div>
+        </div>
+        <div class="itemBody">
+          <ul class="rules">
+            <li>공급자적합성확인 대상 여부를 확인한다. <span class="note">(정의)</span></li>
+            <li>대상 상품인 경우,
+              <ul>
+                <li>KC 마크 또는 '공급자적합성확인' 문구 표기가 있는지 확인한다.</li>
+                <li>상세페이지 또는 상품정보제공고시 중 한 곳에만 정확히 기재되어 있으면 <span class="tag ok">승인</span> <span class="note">(상세페이지 참조 등으로 기입한 경우에도 상세페이지에 잘 기입되어있다면 승인 가능)</span></li>
+              </ul>
+            </li>
+            <li>대상이 아님에도 KC 인증 마크 또는 공급자적합성확인으로 기재한 경우 → <span class="tag bad">거절</span></li>
+          </ul>
+          <p class="example"><span class="exampleLabel">예시</span>어린이 가구 등</p>
+        </div>
+      </article>
+
+      <article class="item" data-key="cert-3">
+        <div class="itemHead">
+          <h3>KC 전기용품 및 생활용품 인증 <span class="note">OR</span> KC 전파인증</h3>
+          <div class="itemHeadRight">
+            <div class="itemLinks">
+              <span class="linkTodo">🔗 전기용품 인증 링크 필요</span>
+              <span class="linkTodo">🔗 전파인증 링크 필요</span>
+            </div>
+            <button class="deleteBtn" hidden>삭제</button>
+          </div>
+        </div>
+        <div class="itemBody">
+          <div class="callout">두 인증 모두 대상이더라도, 택1만 기재되어있으면 <span class="tag ok">승인</span> 가능함 <span class="note">(단, 인증번호가 기입되어있는 경우에는 모두 유효성 여부 확인 필요)</span></div>
+          <ul class="rules">
+            <li>증정품, 사은품을 포함하여 해당 상품의 인증 대상 여부를 확인한다 <span class="note">(단, 인증번호가 메인이 아닌 상품에 대해서는 인증번호가 기재되어있는 경우 유효여부만 체크하고, 없다고 해서 반려/수정요청 하지 않는다. 예: 침대 프레임 속 LED 조명, 콘센트, 내부 전지 등)</span></li>
+            <li>인증 대상인데 인증정보가 없는 경우 → <span class="tag bad">거절</span></li>
+            <li>인증번호와 상품 모델명이 불일치하거나 인증이 유효하지 않은 경우 → <span class="tag bad">거절</span> <span class="note">(단, 카테고리: 가전, 디지털/PC에 한하여)</span></li>
+            <li>상세페이지와 상품정보제공고시 간 인증정보가 상이한 경우 <span class="note">(둘 중 한개만 맞다면, 어떤 항목에 기재된 정보가 잘못되었는지도 표기)</span> → <span class="tag bad">거절</span></li>
+            <li>상세페이지 또는 상품정보제공고시 중 한 곳에만 정확히 기재되어 있으면 <span class="tag ok">승인</span> <span class="note">(상세페이지 참조 등으로 기입한 경우에도 상세페이지에 잘 기입되어있다면 승인 가능)</span></li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="item" data-key="cert-4">
+        <div class="itemHead">
+          <h3>생활화학제품·살생물제품 인증</h3>
+          <div class="itemHeadRight">
+            <div class="itemLinks"><span class="linkTodo">🔗 대상 정의 링크 필요</span></div>
+            <button class="deleteBtn" hidden>삭제</button>
+          </div>
+        </div>
+        <div class="itemBody">
+          <ul class="rules">
+            <li>생활화학제품안전법/살생물 대상 여부를 확인한다.</li>
+            <li>대상 상품인데 인증 또는 신고 정보가 없는 경우 → <span class="tag bad">거절</span></li>
+            <li>인증정보와 상품 정보가 상이한 경우 → <span class="tag bad">거절</span></li>
+            <li>인증된 용도와 다른 내용으로 광고한 경우 → <span class="tag bad">거절</span></li>
+            <li>상세페이지와 상품정보제공고시 간 인증정보가 상이한 경우 <span class="note">(둘 중 한개만 맞다면, 어떤 항목에 기재된 정보가 잘못되었는지도 표기)</span> → <span class="tag bad">거절</span></li>
+            <li>상세페이지 또는 상품정보제공고시 중 한 곳에만 정확히 기재되어 있으면 <span class="tag ok">승인</span> <span class="note">(상세페이지 참조 등으로 기입한 경우에도 상세페이지에 잘 기입되어있다면 승인 가능)</span></li>
+          </ul>
+        </div>
+      </article>
+
+      <button class="addItemBtn" data-cat="cert" hidden>+ 항목 추가</button>
+    </section>
+
+    <section class="catPanel" data-cat="sales">
+      <h2><span class="dot" style="--dot:var(--dot-sales)"></span><span class="catLabel">판매 제한</span></h2>
+
+      <article class="item" data-key="sales-1">
+        <div class="itemHead">
+          <h3>온라인 판매불가 상품</h3>
+          <div class="itemHeadRight">
+            <span class="tag bad">전체 판매불가</span>
+            <button class="deleteBtn" hidden>삭제</button>
+          </div>
+        </div>
+        <div class="itemBody">
+          <div class="callout bad">아래 정의에 해당하는 상품은 법적 판매가 허용되지 않으므로 <span class="tag bad">거절</span>로 분류한다.</div>
+
+          <h4 class="subHead">의약품</h4>
+          <ul class="rules">
+            <li>사람의 질병을 치료·완화·예방할 목적으로 사용되며, 식약처에서 의약품으로 허가·관리되는 제품을 의미한다.</li>
+            <li>복용 또는 인체 투여를 전제로 하는 제품이 해당되며, 건강기능식품(영양제 등)은 이에 해당하지 않는다.</li>
+          </ul>
+
+          <h4 class="subHead">주류</h4>
+          <ul class="rules">
+            <li>음용을 목적으로 제조된 술 제품을 의미하며, 알코올 도수 유무와 관계없이 일반적으로 주류로 인식되는 제품이 해당된다.</li>
+            <li>무알콜·논알콜 주류 역시 청소년 판매불가 상품에 해당하여 판매 불가로 분류한다.</li>
+          </ul>
+
+          <h4 class="subHead">도검</h4>
+          <ul class="rules">
+            <li>도검의 정의 <span class="linkTodo">🔗 링크 필요</span> — 칼날의 길이가 15센티미터 이상인 칼·검·창·치도(雉刀)·비수 등으로서 성질상 흉기로 쓰이는 것과 칼날의 길이가 15센티미터 미만이라 할지라도 흉기로 사용될 위험성이 뚜렷한 것 <span class="note">(월도, 장도, 단도, 검, 창, 치도, 비수)</span></li>
+            <li>발사·베기·찌르기 등의 방식으로 신체에 직접적인 위해를 가할 수 있도록 제작·개조되었거나 그러한 용도로 사용될 수 있는 무기류를 의미한다.</li>
+            <li><span class="tag ok">예외</span> 명확한 사용용도가 확인되어 공구류로 분류되는 맥가이버칼, 도끼류, 주방용/요리용 칼 등은 예외하며, 칼끝이 둥글고 날이 서있지 아니하여 흉기로 사용될 위험성이 없는 도검도 예외한다. <span class="note">(칼날이 없고 고무로 만든 칼 등)</span></li>
+          </ul>
+
+          <h4 class="subHead">총포 및 기타 위험 물품</h4>
+          <ul class="rules">
+            <li>총포의 정의 <span class="linkTodo">🔗 링크 필요</span> — 권총, 소총, 기관총, 포, 엽총, 금속성 탄알이나 가스 등을 쏠 수 있는 장약총포(裝藥銃砲), 공기총(가스를 이용하는 것을 포함한다. 이하 같다) 및 총포신·기관부 등 그 부품(이하 "부품"이라 한다)으로서 대통령령으로 정하는 것을 말한다 <span class="note">(권총, 소총, 기관총, 엽총, 사격총, 어획총, 마취총, 도살총, 산업용총, 구난구명총, 가스발사총, 폭발물 분쇄총 등)</span></li>
+            <li>사람/가축/조류 등을 살상하거나 피해를 입힐 수 있는 성능을 갖춘 총기류는 판매 불가로 분류한다 <span class="note">(단순 고무줄총의 경우에도 사람이나 동물을 향해서 쏘지 말라는 문구가 확인되면 모두 판매불가로 분류한다)</span></li>
+            <li>총포와 아주 비슷하게 보여서 실제 총포와 구분이 어렵거나 헷갈리는 상품도 판매 불가로 분류한다. <span class="linkTodo">🔗 링크 필요</span> 판단이 어려운 경우에는 <span class="tag warn">사람검수 필요</span></li>
+            <li><span class="tag ok">예외</span> KC 인증을 받은 비비탄총, 어린이용 너프건과 같은 장난감 총은 예외된다. 단, 비비탄총 중에서 19금으로 분류되는 상품은 판매불가로 분류된다.</li>
+            <li>그 외 위험물품 <span class="note">(사용 목적 또는 구조상 신체에 물리적 피해를 줄 수 있는 도구로, 공격·방어·위협 수단으로 활용될 수 있는 제품)</span>: 석궁, 분사기, 전기충격기, 화약류(폭탄, 폭약 등), 새총, 날카로운 화살촉, 너클 등</li>
+          </ul>
+
+          <h4 class="subHead">담배</h4>
+          <ul class="rules">
+            <li>연초, 전자담배용 니코틴 액상 등 흡연 또는 니코틴 흡입을 목적으로 하는 제품을 의미한다.</li>
+            <li>전자담배 케이스와 같이 니코틴이 없는 상품이더라도 흡연을 조장하거나 관련있는 상품은 동일하게 판매불가로 분류한다.</li>
+          </ul>
+
+          <h4 class="subHead">도수 있는 안경 및 렌즈</h4>
+          <ul class="rules">
+            <li>시력 교정 목적의 도수가 포함된 안경 또는 콘택트렌즈로, 개인의 시력에 맞춰 사용되는 제품을 의미한다.</li>
+            <li>돋보기 안경 등 도수가 포함되어있는 안경, 선글라스, 렌즈 모두 포함하여 판매불가로 분류한다.</li>
+          </ul>
+
+          <h4 class="subHead">농약</h4>
+          <ul class="rules">
+            <li>해충·잡초·병해를 제거하거나 억제할 목적으로 사용되는 물질로, 농작물에 직접 살포하거나 처리하는 제품을 의미한다.</li>
+            <li>등록 농약에 대해서도 판매불가로 분류한다 <span class="note">(성장조절제, 제초제, 잡초제거 강력 제초제, 나무 뿌리 죽이기, 대나무 죽이기 전용약, 뿌리째 썩음 등 키워드)</span></li>
+          </ul>
+
+          <h4 class="subHead">살아있는 생물/동물</h4>
+          <ul class="rules">
+            <li>살아있는 생물/동물은 판매불가로 분류한다. <span class="tag ok">예외</span> <span class="note">식물은 예외되어 판매가 허용된다.</span></li>
+          </ul>
+        </div>
+      </article>
+
+      <button class="addItemBtn" data-cat="sales" hidden>+ 항목 추가</button>
+    </section>
+
+    <section class="catPanel" data-cat="image">
+      <h2><span class="dot" style="--dot:var(--dot-image)"></span><span class="catLabel">이미지 정책 위반</span></h2>
+
+      <article class="item" data-key="image-1">
+        <div class="itemHead">
+          <h3>상품이미지 내 텍스트 또는 테두리 사용</h3>
+          <div class="itemHeadRight">
+            <button class="deleteBtn" hidden>삭제</button>
+          </div>
+        </div>
+        <div class="itemBody">
+          <div class="callout">서브이미지는 해당 기준 적용하지 않음 (대표이미지 기준)</div>
+          <div class="compareGrid">
+            <div class="compareCol remove">
+              <h4>삭제 필요 · 광고성 텍스트/로고</h4>
+              <ul>
+                <li>행사 문구 (기념일, 시즌성 딜 등)</li>
+                <li>할인 문구 (할인, 혜택, 쿠폰% 등)</li>
+                <li>인증 정보 (KC인증, 식품용기구 등)</li>
+                <li>보증기한 문구 (5년 무상보증, 1Y Warranty 등)</li>
+                <li>제품 성능문구 (물청소 가능, 10시간이상 배터리 등)</li>
+                <li>광고 문구 (Best 상품, 1위 제품 등)</li>
+                <li>기타 문구 (영어 외 과도한 외국어 상품명, 외부쇼핑몰 주소, 워터마크 등)</li>
+                <li>기타 로고 (상품과 관계없는 로고나 이미지, 도형 삽입)</li>
+              </ul>
+            </div>
+            <div class="compareCol keep">
+              <h4>유지 필요 · 정보성 텍스트/로고</h4>
+              <ul>
+                <li>제품 구성 (개수, N개입, 용량, 크기, N+N, 구성품-단독/세트상품 여부 등)</li>
+                <li>판매자 정보 (브랜드 로고, 공식판매점 로고 등)</li>
+                <li>제품 정보 (모델명, 색상, 제조국, 크기 등 / 특히 음반·앨범 상품의 경우 앨범명(앨범 커버 디자인의 텍스트 등), 아티스트·작곡가 명, 버전(포토북 버전 등) 표기 문구)</li>
+                <li>디자인 텍스트 (이미지 디자인 상 사용된 문구)</li>
+                <li>배경 문구 (사진 배경 상 포함된 문구)</li>
+                <li>제품에 각인된 로고, 라벨, 패키지 등</li>
+                <li>사진의 출처 표기 (Photo by, 오늘의집 오감리뷰)</li>
+              </ul>
+            </div>
+          </div>
+          <div class="callout" style="margin-top:1rem;">단, 정보성 텍스트이더라도 전체 썸네일의 1/3 이상 차지하는 문구가 있다면 <span class="tag warn">수정요청 or 사람검수 필요</span></div>
+        </div>
+      </article>
+
+      <article class="item" data-key="image-2">
+        <div class="itemHead">
+          <h3>상품이미지 내 테두리 사용</h3>
+          <div class="itemHeadRight">
+            <button class="deleteBtn" hidden>삭제</button>
+          </div>
+        </div>
+        <div class="itemBody">
+          <ul class="rules">
+            <li>대표 이미지 외곽에 컴퓨터그래픽을 이용한 테두리 효과를, 다른 상품에 비해 주목받기 위한 목적으로 삽입하는 경우 → <span class="tag bad">거절</span></li>
+            <li>타 상품에 비해 눈에 띄도록 의도한 것으로 형평성 문제로 인해 사용 불가</li>
+            <li><span class="tag warn">주의</span> 누끼 이미지에 네모난 상품 이미지(책, 액자 등)가 들어간 경우에 반려되지 않도록 주의 필요</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="item" data-key="image-3">
+        <div class="itemHead">
+          <h3>상품이미지 내 분할컷</h3>
+          <div class="itemHeadRight">
+            <button class="deleteBtn" hidden>삭제</button>
+          </div>
+        </div>
+        <div class="itemBody">
+          <ul class="rules">
+            <li>대표이미지 내 분할컷: 분할된 이미지가 사용된 경우, 하나의 상품 이미지가 아닌 여러 상품의 이미지가 사용된 경우 → <span class="tag bad">거절</span></li>
+            <li><span class="tag ok">예외</span> 화면의 30% 이하를 사용하는 부분 디테일 컷, 상품나열 이미지는 유지한다.</li>
+            <li>서브이미지는 해당 기준 적용하지 않음</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="item" data-key="image-4">
+        <div class="itemHead">
+          <h3>GIF(움직이는 이미지) 사용</h3>
+          <div class="itemHeadRight">
+            <button class="deleteBtn" hidden>삭제</button>
+          </div>
+        </div>
+        <div class="itemBody">
+          <ul class="rules">
+            <li>대표이미지 또는 서브이미지에 GIF 이미지를 등록한 경우 → <span class="tag bad">거절</span> <span class="note">(상세페이지는 허용됨)</span></li>
+          </ul>
+        </div>
+      </article>
+
+      <button class="addItemBtn" data-cat="image" hidden>+ 항목 추가</button>
+    </section>
+
+    <section class="catPanel" data-cat="etc">
+      <h2><span class="dot" style="--dot:var(--dot-etc)"></span><span class="catLabel">기타</span></h2>
+
+      <article class="item" data-key="etc-1">
+        <div class="itemHead">
+          <h3>라이선스</h3>
+          <div class="itemHeadRight">
+            <button class="deleteBtn" hidden>삭제</button>
+          </div>
+        </div>
+        <div class="itemBody">
+          <h4 class="subHead">캐릭터 라이선스 확인</h4>
+          <div class="tableWrap">
+            <table class="licenseTable">
+              <tr><th>브랜드/그룹</th><th>대표 캐릭터·작품</th></tr>
+              <tr><td>산리오</td><td>쿠로미, 마이멜로디, 헬로키티, 시나몬롤, 폼폼푸린, 포차코 등</td></tr>
+              <tr><td>디즈니/픽사</td><td>미키마우스, 겨울왕국, 토이스토리, 곰돌이 푸, 마블 캐릭터, 스타워즈 등</td></tr>
+              <tr><td>포켓몬</td><td>피카츄, 잠만보, 뮤, 메타몽 등</td></tr>
+              <tr><td>에스에이치엠지</td><td>캐치티니핑 등</td></tr>
+              <tr><td>네이버</td><td>네이버 웹툰 등</td></tr>
+              <tr><td>카카오</td><td>카카오프렌즈 등</td></tr>
+              <tr><td>스튜디오 지브리</td><td>센과 치히로, 하울의 움직이는 성 등</td></tr>
+              <tr><td>미피</td><td>—</td></tr>
+              <tr><td>무민</td><td>—</td></tr>
+              <tr><td>반다이 남코</td><td>기동전사 건담, 에반게리온, 원피스, 드래곤볼, 귀멸의 칼날, 먼작귀, 가면라이더, 울트라맨 등</td></tr>
+              <tr><td>유명 화가</td><td>인지도 있는 화가의 명화 전반</td></tr>
+            </table>
+          </div>
+
+          <h4 class="subHead">글로벌 브랜드 라이선스 확인</h4>
+          <ul class="rules">
+            <li>네스프레소: 해외직구, 병행수입 업체 등 총판 이미지 사용불가 → <span class="tag bad">거절</span></li>
+            <li>이 외에는 등록제한브랜드로 관리</li>
+          </ul>
+
+          <h4 class="subHead">라이선스리스트 기준</h4>
+          <ul class="rules">
+            <li>인명이 사용된 작가의 작품 중 리스트업 또는 아티스트 미보유업체</li>
+            <li>특정 캐릭터나 작가명을 선정해주면 → 추가가 필요한 경우 리스트에 추가하는 방식으로 진행</li>
+          </ul>
+
+          <div class="callout" style="margin-top:1rem;">상세페이지 내 라이선스 소유사와 저작권 관련 계약을 체결하여 제조 또는 유통한 상품임을 나타내는 문구, 공식 라이선스 제품이라는 문구(ⓒ 표시 등), 제품에 부착된 홀로그램 이미지 등이 있을 시 <span class="tag ok">승인</span></div>
+          <p class="example"><span class="exampleLabel">예외</span>해외직구 상품의 캐릭터·작품 라이선스는 확인하지 않음 <span class="note">(상품명에 "[해외]" 표기된 경우)</span></p>
+        </div>
+      </article>
+
+      <button class="addItemBtn" data-cat="etc" hidden>+ 항목 추가</button>
+    </section>
+
+    <p class="noResults" id="noResults" hidden>검색 결과가 없어요. 다른 키워드로 찾아보세요.</p>
+  </main>
+</div>
+
+<script id="guide-script">
+  (function(){
+    var layout = document.querySelector('.layout');
+    function getTabs(){ return document.querySelectorAll('.tab'); }
+    function getPanels(){ return document.querySelectorAll('.catPanel'); }
+    var search = document.getElementById('search');
+    var noResults = document.getElementById('noResults');
+    var editToggle = document.getElementById('editToggle');
+    var saveBtn = document.getElementById('saveBtn');
+    var cancelBtn = document.getElementById('cancelBtn');
+    var editHint = document.getElementById('editHint');
+    var readOnlyHint = document.getElementById('readOnlyHint');
+
+    var canWrite = true;
+    var toastEl = document.createElement('div');
+    toastEl.className = 'toast';
+    document.body.appendChild(toastEl);
+    var toastTimer = null;
+
+    function showToast(msg){
+      toastEl.textContent = msg;
+      toastEl.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(function(){ toastEl.classList.remove('show'); }, 3200);
+    }
+
+    function applyFilter(){
+      var q = search.value.trim().toLowerCase();
+      var anyVisible = false;
+      getPanels().forEach(function(panel){
+        var items = panel.querySelectorAll('.item');
+        var panelHasVisible = false;
+        items.forEach(function(item){
+          var match = !q || item.textContent.toLowerCase().indexOf(q) !== -1;
+          item.hidden = !match;
+          if (match) panelHasVisible = true;
+        });
+        if (panelHasVisible) anyVisible = true;
+      });
+      noResults.hidden = anyVisible || !q;
+    }
+
+    function setActiveTab(cat){
+      getTabs().forEach(function(t){ t.classList.toggle('active', t.dataset.cat === cat); });
+      getPanels().forEach(function(p){
+        p.hidden = !(cat === 'all' || p.dataset.cat === cat);
+      });
+      applyFilter();
+    }
+
+    function confirmOnEnter(el){
+      el.addEventListener('keydown', function(e){
+        if (e.key === 'Enter'){ e.preventDefault(); el.blur(); }
+      });
+    }
+
+    function wireTab(tabEl){
+      tabEl.addEventListener('click', function(){ setActiveTab(tabEl.dataset.cat); });
+      var label = tabEl.querySelector('.label');
+      if (label) confirmOnEnter(label);
+    }
+    getTabs().forEach(wireTab);
+    document.querySelectorAll('.catLabel').forEach(confirmOnEnter);
+    search.addEventListener('input', applyFilter);
+
+    function updateCounts(){
+      var total = 0;
+      getPanels().forEach(function(panel){
+        var n = panel.querySelectorAll('.item').length;
+        total += n;
+        var tab = document.querySelector('.tab[data-cat="' + panel.dataset.cat + '"] .count');
+        if (tab) tab.textContent = n;
+      });
+      var allTab = document.querySelector('.tab[data-cat="all"] .count');
+      if (allTab) allTab.textContent = total;
+    }
+
+    function wireDeleteButton(btn){
+      btn.addEventListener('click', function(){
+        var item = btn.closest('.item');
+        if (btn.classList.contains('confirm')){
+          item.remove();
+          updateCounts();
+        } else {
+          btn.classList.add('confirm');
+          btn.textContent = '정말 삭제?';
+          clearTimeout(btn._resetT);
+          btn._resetT = setTimeout(function(){
+            btn.classList.remove('confirm');
+            btn.textContent = '삭제';
+          }, 3000);
+        }
+      });
+    }
+    document.querySelectorAll('.deleteBtn').forEach(wireDeleteButton);
+
+    function wireAddItemBtn(btn){
+      btn.addEventListener('click', function(){
+        var cat = btn.dataset.cat;
+        var panel = document.querySelector('.catPanel[data-cat="' + cat + '"]');
+        var key = cat + '-new-' + Date.now().toString(36);
+        var article = document.createElement('article');
+        article.className = 'item';
+        article.dataset.key = key;
+        article.innerHTML =
+          '<div class="itemHead">' +
+            '<h3 contenteditable="true">새 항목 제목</h3>' +
+            '<div class="itemHeadRight"><button class="deleteBtn">삭제</button></div>' +
+          '</div>' +
+          '<div class="itemBody" contenteditable="true"><ul class="rules"><li>내용을 입력하세요.</li></ul></div>';
+        panel.insertBefore(article, btn);
+        wireDeleteButton(article.querySelector('.deleteBtn'));
+        updateCounts();
+        article.querySelector('h3').focus();
+      });
+    }
+    document.querySelectorAll('.catPanel > .addItemBtn').forEach(wireAddItemBtn);
+
+    var addCatBtn = document.getElementById('addCatBtn');
+    var catColorCycle = ['var(--dot-cert)', 'var(--dot-sales)', 'var(--dot-image)', 'var(--dot-etc)', 'var(--accent)'];
+
+    addCatBtn.addEventListener('click', function(){
+      var count = getTabs().length - 1;
+      var color = catColorCycle[count % catColorCycle.length];
+      var key = 'cat-' + Date.now().toString(36);
+
+      var tab = document.createElement('button');
+      tab.className = 'tab';
+      tab.dataset.cat = key;
+      tab.innerHTML =
+        '<span class="dot" style="--dot:' + color + '"></span>' +
+        '<span class="label" contenteditable="true">새 카테고리</span>' +
+        '<span class="count">0</span>';
+      addCatBtn.parentNode.insertBefore(tab, addCatBtn);
+      wireTab(tab);
+
+      var panel = document.createElement('section');
+      panel.className = 'catPanel';
+      panel.dataset.cat = key;
+      panel.innerHTML =
+        '<h2><span class="dot" style="--dot:' + color + '"></span><span class="catLabel" contenteditable="true">새 카테고리</span></h2>' +
+        '<button class="addItemBtn" data-cat="' + key + '">+ 항목 추가</button>';
+      var noResultsEl = document.getElementById('noResults');
+      noResultsEl.parentNode.insertBefore(panel, noResultsEl);
+      wireAddItemBtn(panel.querySelector('.addItemBtn'));
+      confirmOnEnter(panel.querySelector('.catLabel'));
+
+      updateCounts();
+      setActiveTab(key);
+
+      var labelEl = tab.querySelector('.label');
+      labelEl.focus();
+      var range = document.createRange();
+      range.selectNodeContents(labelEl);
+      var sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+    });
+
+    function setEditableRegions(on){
+      document.querySelectorAll('.itemHead h3, .itemBody, .tab:not([data-cat="all"]) .label, .catPanel .catLabel').forEach(function(el){
+        el.setAttribute('contenteditable', on ? 'true' : 'false');
+      });
+      document.querySelectorAll('.deleteBtn, .addItemBtn').forEach(function(el){ el.hidden = !on; });
+      layout.classList.toggle('editing', on);
+    }
+
+    function enterEdit(){
+      if (!canWrite){
+        readOnlyHint.hidden = false;
+        return;
+      }
+      setEditableRegions(true);
+      editToggle.hidden = true;
+      saveBtn.hidden = false;
+      cancelBtn.hidden = false;
+      editHint.hidden = false;
+    }
+
+    function exitEditUI(){
+      setEditableRegions(false);
+      editToggle.hidden = canWrite ? false : true;
+      saveBtn.hidden = true;
+      cancelBtn.hidden = true;
+      editHint.hidden = true;
+    }
+
+    editToggle.addEventListener('click', enterEdit);
+    cancelBtn.addEventListener('click', function(){
+      location.reload();
+    });
+
+    function buildPublishHtml(){
+      var clone = layout.cloneNode(true);
+      var searchClone = clone.querySelector('#search');
+      if (searchClone) searchClone.setAttribute('value', '');
+      clone.querySelectorAll('[contenteditable]').forEach(function(el){ el.removeAttribute('contenteditable'); });
+      clone.querySelectorAll('.deleteBtn').forEach(function(el){
+        el.hidden = true; el.classList.remove('confirm'); el.textContent = '삭제';
+      });
+      clone.querySelectorAll('.addItemBtn').forEach(function(el){ el.hidden = true; });
+      clone.classList.remove('editing');
+
+      var editToggleClone = clone.querySelector('#editToggle');
+      if (editToggleClone) editToggleClone.hidden = false;
+      var saveBtnClone = clone.querySelector('#saveBtn');
+      if (saveBtnClone){ saveBtnClone.hidden = true; saveBtnClone.disabled = false; saveBtnClone.textContent = '저장'; }
+      var cancelBtnClone = clone.querySelector('#cancelBtn');
+      if (cancelBtnClone) cancelBtnClone.hidden = true;
+      var editHintClone = clone.querySelector('#editHint');
+      if (editHintClone) editHintClone.hidden = true;
+
+      var lastUpdatedEl = clone.querySelector('.lastUpdated');
+      if (lastUpdatedEl) lastUpdatedEl.textContent = '최종 수정 ' + new Date().toISOString().slice(0, 10);
+
+      var styleTag = document.getElementById('guide-style').outerHTML;
+      var scriptTag = document.getElementById('guide-script').outerHTML;
+
+      return '<!doctype html>\n<html lang="ko">\n<head>\n' +
+        '<meta charset="utf-8">\n' +
+        '<meta name="viewport" content="width=device-width, initial-scale=1">\n' +
+        '<title>' + document.title + '</title>\n' +
+        styleTag + '\n' +
+        '</head>\n<body>\n' + clone.outerHTML + '\n' + scriptTag + '\n</body>\n</html>';
+    }
+
+    async function doSave(){
+      if (!window.claude || typeof window.claude.use !== 'function'){
+        showToast('저장은 Claude 아티팩트로 열었을 때만 가능해요.');
+        return;
+      }
+      saveBtn.disabled = true;
+      saveBtn.textContent = '저장 중...';
+      try {
+        var artifactNs = await window.claude.use('artifact');
+        if (!artifactNs){
+          showToast('저장 기능을 불러오지 못했어요. 잠시 후 다시 시도해주세요.');
+          return;
+        }
+        var html = buildPublishHtml();
+        await artifactNs.publish(html);
+        showToast('저장했어요.');
+      } catch (err) {
+        var code = err && err.code;
+        if (code === 'not_writer' || code === 'not_granted'){
+          canWrite = false;
+          exitEditUI();
+          readOnlyHint.hidden = false;
+          editToggle.hidden = true;
+          showToast('읽기 전용 보기예요. 편집 권한이 없어요.');
+        } else if (code === 'conflict'){
+          showToast('다른 사람이 방금 저장해서 최신 내용으로 곧 새로고침돼요.');
+        } else {
+          showToast('저장에 실패했어요: ' + (err && err.message ? err.message : '알 수 없는 오류'));
+        }
+      } finally {
+        saveBtn.disabled = false;
+        saveBtn.textContent = '저장';
+      }
+    }
+    saveBtn.addEventListener('click', doSave);
+
+    updateCounts();
+    setActiveTab('all');
+  })();
+</script>
