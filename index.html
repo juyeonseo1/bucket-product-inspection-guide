@@ -191,6 +191,40 @@
   .btn[hidden]{display:none;}
   .editControls{display:flex; gap:.5rem; margin-left:auto;}
 
+  .richToolbar{
+    display:flex; align-items:center; gap:.35rem; flex-wrap:wrap;
+    padding:0 0 1rem;
+  }
+  .richToolbar[hidden]{display:none;}
+  .rtBtn{
+    font:inherit; font-size:.85rem; min-width:2rem; height:2rem;
+    padding:0 .5rem; border-radius:6px; border:1px solid var(--line);
+    background:var(--card); color:var(--ink); cursor:pointer;
+  }
+  .rtBtn:hover{border-color:var(--accent);}
+  .rtBtn.active{background:var(--accent-soft); border-color:var(--accent); color:var(--accent);}
+  .rtDivider{width:1px; height:1.4rem; background:var(--line); margin:0 .15rem;}
+  .rtSelect{
+    font:inherit; font-size:.82rem; height:2rem; padding:0 .4rem;
+    border-radius:6px; border:1px solid var(--line); background:var(--card); color:var(--ink);
+  }
+  .rtColorBtn{
+    position:relative; display:inline-flex; align-items:center; justify-content:center;
+    width:2rem; height:2rem; border-radius:6px; border:1px solid var(--line);
+    background:var(--card); font-size:.85rem; font-weight:700; cursor:pointer;
+  }
+  .rtColorBtn input[type="color"]{
+    position:absolute; inset:0; opacity:0; border:none; padding:0; cursor:pointer;
+  }
+  .rtHighlightIcon{background:linear-gradient(transparent 60%, #fff59d 60%);}
+
+  .toggleBlock{margin:.6rem 0; border:1px solid var(--line); border-radius:8px; padding:.15rem .8rem;}
+  .toggleBlock > summary{cursor:pointer; font-weight:600; padding:.4rem 0;}
+  .toggleBlock[open] > summary{margin-bottom:.2rem;}
+  .toggleBlock .toggleBody{padding:.2rem 0 .6rem;}
+
+  .itemBody iframe.pdfEmbed{width:100%; height:480px; border:1px solid var(--line); border-radius:8px; margin:.6rem 0;}
+
   .editHint, .readOnlyHint{
     font-size:.85rem;
     margin:0 0 1rem;
@@ -234,7 +268,6 @@
   }
   .itemHead h3{font-size:1.1rem;}
   .itemHeadRight{display:flex; align-items:center; gap:.6rem; flex-wrap:wrap;}
-  .itemLinks{display:flex; gap:.4rem; flex-wrap:wrap;}
 
   .tag{
     display:inline-flex;
@@ -251,18 +284,6 @@
   .tag.bad{color:var(--bad); background:var(--bad-bg);}
   .tag.warn{color:var(--warn); background:var(--warn-bg);}
 
-  .linkTodo{
-    display:inline-flex;
-    align-items:center;
-    gap:.3rem;
-    font-size:.76rem;
-    font-family:var(--mono);
-    color:var(--warn);
-    background:var(--warn-bg);
-    padding:.08rem .55rem;
-    border-radius:999px;
-    white-space:nowrap;
-  }
 
   .deleteBtn{
     font:inherit;
@@ -440,7 +461,37 @@
         <button id="cancelBtn" class="btn" hidden>취소</button>
       </div>
     </div>
-    <p id="editHint" class="editHint" hidden>편집 모드예요. 제목·내용을 클릭해서 바로 고치고, 다 되면 저장을 눌러주세요. 취소하면 마지막 저장 상태로 되돌아가요.</p>
+    <div class="richToolbar" id="richToolbar" hidden>
+      <button type="button" class="rtBtn" data-cmd="bold" title="굵게"><b>B</b></button>
+      <button type="button" class="rtBtn" data-cmd="italic" title="기울임"><i>I</i></button>
+      <button type="button" class="rtBtn" data-cmd="underline" title="밑줄"><u>U</u></button>
+      <button type="button" class="rtBtn" data-cmd="strikeThrough" title="취소선"><s>S</s></button>
+      <span class="rtDivider"></span>
+      <select class="rtSelect" id="rtFont" title="글꼴">
+        <option value="">글꼴</option>
+        <option value="'Noto Sans KR', sans-serif">기본</option>
+        <option value="'Noto Serif KR', serif">명조</option>
+        <option value="'JetBrains Mono', monospace">고정폭</option>
+        <option value="Arial, sans-serif">Arial</option>
+        <option value="Georgia, serif">Georgia</option>
+      </select>
+      <select class="rtSelect" id="rtSize" title="글자 크기">
+        <option value="">크기</option>
+        <option value="12">작게</option>
+        <option value="15">보통</option>
+        <option value="19">크게</option>
+        <option value="24">아주 크게</option>
+      </select>
+      <span class="rtDivider"></span>
+      <label class="rtColorBtn" title="글자 색">A<input type="color" id="rtForeColor" value="#1b222c"></label>
+      <label class="rtColorBtn rtHighlight" title="형광펜"><span class="rtHighlightIcon">A</span><input type="color" id="rtHiliteColor" value="#fff59d"></label>
+      <button type="button" class="rtBtn" id="rtPainter" title="서식 복사">🖌</button>
+      <span class="rtDivider"></span>
+      <button type="button" class="rtBtn" id="rtToggle" title="토글 블록 삽입">▸ 토글</button>
+      <button type="button" class="rtBtn" id="rtAttach" title="이미지·PDF 첨부">📎 첨부</button>
+      <input type="file" id="rtFileInput" accept="image/*,application/pdf" hidden>
+    </div>
+    <p id="editHint" class="editHint" hidden>편집 모드예요. 텍스트를 드래그해서 서식 툴바로 꾸미거나, 제목·내용을 클릭해서 바로 고치고, 다 되면 저장을 눌러주세요. 취소하면 마지막 저장 상태로 되돌아가요.</p>
     <p id="readOnlyHint" class="readOnlyHint" hidden>이 보기는 읽기 전용이에요. 편집 권한이 있는 사람만 저장할 수 있어요.</p>
 
     <section class="catPanel" data-cat="cert">
@@ -450,7 +501,6 @@
         <div class="itemHead">
           <h3>KC 어린이제품</h3>
           <div class="itemHeadRight">
-            <div class="itemLinks"><span class="linkTodo">🔗 인증대상 정의 링크 필요</span></div>
             <button class="deleteBtn" hidden>삭제</button>
           </div>
         </div>
@@ -491,10 +541,6 @@
         <div class="itemHead">
           <h3>KC 전기용품 및 생활용품 인증 <span class="note">OR</span> KC 전파인증</h3>
           <div class="itemHeadRight">
-            <div class="itemLinks">
-              <span class="linkTodo">🔗 전기용품 인증 링크 필요</span>
-              <span class="linkTodo">🔗 전파인증 링크 필요</span>
-            </div>
             <button class="deleteBtn" hidden>삭제</button>
           </div>
         </div>
@@ -514,7 +560,6 @@
         <div class="itemHead">
           <h3>생활화학제품·살생물제품 인증</h3>
           <div class="itemHeadRight">
-            <div class="itemLinks"><span class="linkTodo">🔗 대상 정의 링크 필요</span></div>
             <button class="deleteBtn" hidden>삭제</button>
           </div>
         </div>
@@ -570,7 +615,7 @@
           <ul class="rules">
             <li>총포의 정의 — 권총, 소총, 기관총, 포, 엽총, 금속성 탄알이나 가스 등을 쏠 수 있는 장약총포(裝藥銃砲), 공기총(가스를 이용하는 것을 포함한다. 이하 같다) 및 총포신·기관부 등 그 부품(이하 "부품"이라 한다)으로서 대통령령으로 정하는 것을 말한다 <span class="note">(권총, 소총, 기관총, 엽총, 사격총, 어획총, 마취총, 도살총, 산업용총, 구난구명총, 가스발사총, 폭발물 분쇄총 등)</span></li>
             <li>사람/가축/조류 등을 살상하거나 피해를 입힐 수 있는 성능을 갖춘 총기류는 판매 불가로 분류한다 <span class="note">(단순 고무줄총의 경우에도 사람이나 동물을 향해서 쏘지 말라는 문구가 확인되면 모두 판매불가로 분류한다)</span></li>
-            <li>총포와 아주 비슷하게 보여서 실제 총포와 구분이 어렵거나 헷갈리는 상품도 판매 불가로 분류한다. <span class="linkTodo">🔗 링크 필요</span> 판단이 어려운 경우에는 <span class="tag warn">사람검수 필요</span></li>
+            <li>총포와 아주 비슷하게 보여서 실제 총포와 구분이 어렵거나 헷갈리는 상품도 판매 불가로 분류한다. 판단이 어려운 경우에는 <span class="tag warn">사람검수 필요</span></li>
             <li><span class="tag ok">예외</span> KC 인증을 받은 비비탄총, 어린이용 너프건과 같은 장난감 총은 예외된다. 단, 비비탄총 중에서 19금으로 분류되는 상품은 판매불가로 분류된다.</li>
             <li>그 외 위험물품 <span class="note">(사용 목적 또는 구조상 신체에 물리적 피해를 줄 수 있는 도구로, 공격·방어·위협 수단으로 활용될 수 있는 제품)</span>: 석궁, 분사기, 전기충격기, 화약류(폭탄, 폭약 등), 새총, 날카로운 화살촉, 너클 등</li>
           </ul>
@@ -760,6 +805,7 @@
     var cancelBtn = document.getElementById('cancelBtn');
     var editHint = document.getElementById('editHint');
     var readOnlyHint = document.getElementById('readOnlyHint');
+    var richToolbar = document.getElementById('richToolbar');
 
     var canWrite = true;
     var toastEl = document.createElement('div');
@@ -956,6 +1002,7 @@
       saveBtn.hidden = false;
       cancelBtn.hidden = false;
       editHint.hidden = false;
+      richToolbar.hidden = false;
     }
 
     function exitEditUI(){
@@ -964,6 +1011,7 @@
       saveBtn.hidden = true;
       cancelBtn.hidden = true;
       editHint.hidden = true;
+      richToolbar.hidden = true;
     }
 
     editToggle.addEventListener('click', enterEdit);
@@ -990,6 +1038,8 @@
       if (cancelBtnClone) cancelBtnClone.hidden = true;
       var editHintClone = clone.querySelector('#editHint');
       if (editHintClone) editHintClone.hidden = true;
+      var richToolbarClone = clone.querySelector('#richToolbar');
+      if (richToolbarClone) richToolbarClone.hidden = true;
 
       var lastUpdatedEl = clone.querySelector('.lastUpdated');
       if (lastUpdatedEl) lastUpdatedEl.textContent = '최종 수정 ' + new Date().toISOString().slice(0, 10);
@@ -1041,19 +1091,22 @@
     }
     saveBtn.addEventListener('click', doSave);
 
-    function insertImageAtCaret(dataUrl){
-      var img = document.createElement('img');
-      img.src = dataUrl;
+    function insertNodeAtCaret(node){
       var sel = window.getSelection();
       if (sel && sel.rangeCount > 0){
         var range = sel.getRangeAt(0);
         range.deleteContents();
-        range.insertNode(img);
-        range.setStartAfter(img);
-        range.setEndAfter(img);
+        range.insertNode(node);
+        range.setStartAfter(node);
+        range.setEndAfter(node);
         sel.removeAllRanges();
         sel.addRange(range);
       }
+    }
+    function insertImageAtCaret(dataUrl){
+      var img = document.createElement('img');
+      img.src = dataUrl;
+      insertNodeAtCaret(img);
     }
 
     document.addEventListener('paste', function(e){
@@ -1071,6 +1124,165 @@
           return;
         }
       }
+    });
+
+    var savedRange = null;
+    function saveSelectionIfInEditable(){
+      var sel = window.getSelection();
+      if (!sel || sel.rangeCount === 0) return;
+      var r = sel.getRangeAt(0);
+      var container = r.commonAncestorContainer;
+      var el = container.nodeType === 1 ? container : container.parentElement;
+      if (el && el.closest('[contenteditable="true"]')) savedRange = r.cloneRange();
+    }
+    function restoreSelection(){
+      if (!savedRange) return false;
+      var sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(savedRange);
+      return true;
+    }
+    document.addEventListener('selectionchange', saveSelectionIfInEditable);
+
+    function execCmd(cmd, val){
+      if (!restoreSelection()) return;
+      try { document.execCommand(cmd, false, val || null); } catch(e){}
+    }
+
+    function wrapSelectionWithStyle(styleProp, styleVal){
+      if (!restoreSelection()) return;
+      var sel = window.getSelection();
+      if (!sel.rangeCount) return;
+      var range = sel.getRangeAt(0);
+      if (range.collapsed) return;
+      var span = document.createElement('span');
+      span.style[styleProp] = styleVal;
+      try { range.surroundContents(span); }
+      catch(e){
+        var frag = range.extractContents();
+        span.appendChild(frag);
+        range.insertNode(span);
+      }
+      sel.removeAllRanges();
+    }
+
+    richToolbar.querySelectorAll('.rtBtn, .rtSelect').forEach(function(el){
+      el.addEventListener('mousedown', function(e){
+        if (el.tagName !== 'SELECT') e.preventDefault();
+      });
+    });
+
+    richToolbar.querySelectorAll('.rtBtn[data-cmd]').forEach(function(btn){
+      btn.addEventListener('click', function(){ execCmd(btn.dataset.cmd); });
+    });
+
+    document.getElementById('rtFont').addEventListener('change', function(e){
+      if (e.target.value) execCmd('fontName', e.target.value);
+      e.target.value = '';
+    });
+
+    document.getElementById('rtSize').addEventListener('change', function(e){
+      if (e.target.value) wrapSelectionWithStyle('fontSize', e.target.value + 'px');
+      e.target.value = '';
+    });
+
+    var rtForeColor = document.getElementById('rtForeColor');
+    rtForeColor.addEventListener('mousedown', saveSelectionIfInEditable);
+    rtForeColor.addEventListener('input', function(){ execCmd('foreColor', rtForeColor.value); });
+
+    var rtHiliteColor = document.getElementById('rtHiliteColor');
+    rtHiliteColor.addEventListener('mousedown', saveSelectionIfInEditable);
+    rtHiliteColor.addEventListener('input', function(){
+      if (!restoreSelection()) return;
+      try { document.execCommand('hiliteColor', false, rtHiliteColor.value); }
+      catch(e){ try { document.execCommand('backColor', false, rtHiliteColor.value); } catch(e2){} }
+    });
+
+    var painterSource = null;
+    var rtPainter = document.getElementById('rtPainter');
+    rtPainter.addEventListener('click', function(){
+      if (!restoreSelection()){ showToast('먼저 서식을 복사할 텍스트를 선택하세요.'); return; }
+      var sel = window.getSelection();
+      var node = sel.anchorNode;
+      var el = node && (node.nodeType === 1 ? node : node.parentElement);
+      if (!el) return;
+      var cs = getComputedStyle(el);
+      painterSource = {
+        fontFamily: cs.fontFamily, fontSize: cs.fontSize, fontWeight: cs.fontWeight,
+        fontStyle: cs.fontStyle, textDecoration: cs.textDecorationLine,
+        color: cs.color, backgroundColor: cs.backgroundColor
+      };
+      rtPainter.classList.add('active');
+      showToast('서식을 복사했어요. 적용할 텍스트를 선택하세요.');
+    });
+
+    document.addEventListener('mouseup', function(){
+      if (!painterSource) return;
+      var sel = window.getSelection();
+      if (!sel || sel.rangeCount === 0 || sel.isCollapsed) return;
+      var range = sel.getRangeAt(0);
+      var container = range.commonAncestorContainer;
+      var el = container.nodeType === 1 ? container : container.parentElement;
+      if (!el || !el.closest('.itemBody[contenteditable="true"]')) return;
+      var span = document.createElement('span');
+      span.style.fontFamily = painterSource.fontFamily;
+      span.style.fontSize = painterSource.fontSize;
+      span.style.fontWeight = painterSource.fontWeight;
+      span.style.fontStyle = painterSource.fontStyle;
+      span.style.textDecoration = painterSource.textDecoration;
+      span.style.color = painterSource.color;
+      span.style.backgroundColor = painterSource.backgroundColor;
+      try { range.surroundContents(span); }
+      catch(err){
+        var frag = range.extractContents();
+        span.appendChild(frag);
+        range.insertNode(span);
+      }
+      sel.removeAllRanges();
+      painterSource = null;
+      rtPainter.classList.remove('active');
+    });
+
+    document.getElementById('rtToggle').addEventListener('click', function(){
+      if (!restoreSelection()) return;
+      var sel = window.getSelection();
+      if (!sel.rangeCount) return;
+      var range = sel.getRangeAt(0);
+      var details = document.createElement('details');
+      details.className = 'toggleBlock';
+      details.innerHTML = '<summary>토글 제목</summary><div class="toggleBody"><p>내용을 입력하세요.</p></div>';
+      range.collapse(false);
+      range.insertNode(details);
+      sel.removeAllRanges();
+    });
+
+    var rtAttach = document.getElementById('rtAttach');
+    var rtFileInput = document.getElementById('rtFileInput');
+    rtAttach.addEventListener('mousedown', function(e){ e.preventDefault(); saveSelectionIfInEditable(); });
+    rtAttach.addEventListener('click', function(){ rtFileInput.click(); });
+    rtFileInput.addEventListener('change', function(){
+      var file = rtFileInput.files[0];
+      if (!file) return;
+      if (file.type.indexOf('image/') !== 0 && file.type !== 'application/pdf'){
+        showToast('이미지 또는 PDF만 첨부할 수 있어요.');
+        rtFileInput.value = '';
+        return;
+      }
+      var reader = new FileReader();
+      reader.onload = function(ev){
+        restoreSelection();
+        if (file.type === 'application/pdf'){
+          var iframe = document.createElement('iframe');
+          iframe.className = 'pdfEmbed';
+          iframe.src = ev.target.result;
+          iframe.title = file.name;
+          insertNodeAtCaret(iframe);
+        } else {
+          insertImageAtCaret(ev.target.result);
+        }
+        rtFileInput.value = '';
+      };
+      reader.readAsDataURL(file);
     });
 
     updateCounts();
