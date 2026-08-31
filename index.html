@@ -457,6 +457,7 @@
       <input type="search" id="search" placeholder="항목 검색 (예: KC, 도검, GIF, 라이선스)">
       <span class="lastUpdated">최종 수정 2026-08-31</span>
       <div class="editControls">
+        <button id="themeToggle" class="btn" title="화면 테마 전환">☀️</button>
         <button id="editToggle" class="btn">✏️ 편집</button>
         <button id="saveBtn" class="btn primary" hidden>저장</button>
         <button id="cancelBtn" class="btn" hidden>취소</button>
@@ -807,6 +808,21 @@
     var editHint = document.getElementById('editHint');
     var readOnlyHint = document.getElementById('readOnlyHint');
     var richToolbar = document.getElementById('richToolbar');
+    var themeToggle = document.getElementById('themeToggle');
+
+    function applyTheme(theme){
+      document.documentElement.dataset.theme = theme;
+      themeToggle.textContent = theme === 'dark' ? '🌙' : '☀️';
+      themeToggle.title = theme === 'dark' ? '라이트 모드로 전환' : '다크 모드로 전환';
+    }
+    var savedTheme = null;
+    try { savedTheme = localStorage.getItem('guideTheme'); } catch(e){}
+    applyTheme(savedTheme === 'dark' ? 'dark' : 'light');
+    themeToggle.addEventListener('click', function(){
+      var next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+      applyTheme(next);
+      try { localStorage.setItem('guideTheme', next); } catch(e){}
+    });
 
     var canWrite = true;
     var toastEl = document.createElement('div');
