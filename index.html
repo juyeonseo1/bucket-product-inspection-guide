@@ -127,6 +127,14 @@
     background:var(--dot, var(--accent));
     flex-shrink:0;
   }
+  .dot{position:relative; display:inline-block;}
+  .dotPicker{
+    position:absolute; inset:-6px;
+    opacity:0; border:none; padding:0; background:none;
+    pointer-events:none; cursor:pointer;
+  }
+  .layout.editing .dot{cursor:pointer;}
+  .layout.editing .dotPicker{pointer-events:auto;}
   .tab .label{flex:1;}
   .tab .count{
     font-family:var(--mono);
@@ -205,6 +213,8 @@
     border-bottom:1px solid var(--line);
   }
   .catPanel h2 .dot{width:.7rem; height:.7rem; border-radius:50%; background:var(--dot);}
+
+  .itemBody img{max-width:100%; display:block; margin:.6rem 0; border-radius:8px; border:1px solid var(--line);}
 
   .item{
     background:var(--card);
@@ -551,14 +561,14 @@
 
           <h4 class="subHead">도검</h4>
           <ul class="rules">
-            <li>도검의 정의 <span class="linkTodo">🔗 링크 필요</span> — 칼날의 길이가 15센티미터 이상인 칼·검·창·치도(雉刀)·비수 등으로서 성질상 흉기로 쓰이는 것과 칼날의 길이가 15센티미터 미만이라 할지라도 흉기로 사용될 위험성이 뚜렷한 것 <span class="note">(월도, 장도, 단도, 검, 창, 치도, 비수)</span></li>
+            <li>도검의 정의 — 칼날의 길이가 15센티미터 이상인 칼·검·창·치도(雉刀)·비수 등으로서 성질상 흉기로 쓰이는 것과 칼날의 길이가 15센티미터 미만이라 할지라도 흉기로 사용될 위험성이 뚜렷한 것 <span class="note">(월도, 장도, 단도, 검, 창, 치도, 비수)</span></li>
             <li>발사·베기·찌르기 등의 방식으로 신체에 직접적인 위해를 가할 수 있도록 제작·개조되었거나 그러한 용도로 사용될 수 있는 무기류를 의미한다.</li>
             <li><span class="tag ok">예외</span> 명확한 사용용도가 확인되어 공구류로 분류되는 맥가이버칼, 도끼류, 주방용/요리용 칼 등은 예외하며, 칼끝이 둥글고 날이 서있지 아니하여 흉기로 사용될 위험성이 없는 도검도 예외한다. <span class="note">(칼날이 없고 고무로 만든 칼 등)</span></li>
           </ul>
 
           <h4 class="subHead">총포 및 기타 위험 물품</h4>
           <ul class="rules">
-            <li>총포의 정의 <span class="linkTodo">🔗 링크 필요</span> — 권총, 소총, 기관총, 포, 엽총, 금속성 탄알이나 가스 등을 쏠 수 있는 장약총포(裝藥銃砲), 공기총(가스를 이용하는 것을 포함한다. 이하 같다) 및 총포신·기관부 등 그 부품(이하 "부품"이라 한다)으로서 대통령령으로 정하는 것을 말한다 <span class="note">(권총, 소총, 기관총, 엽총, 사격총, 어획총, 마취총, 도살총, 산업용총, 구난구명총, 가스발사총, 폭발물 분쇄총 등)</span></li>
+            <li>총포의 정의 — 권총, 소총, 기관총, 포, 엽총, 금속성 탄알이나 가스 등을 쏠 수 있는 장약총포(裝藥銃砲), 공기총(가스를 이용하는 것을 포함한다. 이하 같다) 및 총포신·기관부 등 그 부품(이하 "부품"이라 한다)으로서 대통령령으로 정하는 것을 말한다 <span class="note">(권총, 소총, 기관총, 엽총, 사격총, 어획총, 마취총, 도살총, 산업용총, 구난구명총, 가스발사총, 폭발물 분쇄총 등)</span></li>
             <li>사람/가축/조류 등을 살상하거나 피해를 입힐 수 있는 성능을 갖춘 총기류는 판매 불가로 분류한다 <span class="note">(단순 고무줄총의 경우에도 사람이나 동물을 향해서 쏘지 말라는 문구가 확인되면 모두 판매불가로 분류한다)</span></li>
             <li>총포와 아주 비슷하게 보여서 실제 총포와 구분이 어렵거나 헷갈리는 상품도 판매 불가로 분류한다. <span class="linkTodo">🔗 링크 필요</span> 판단이 어려운 경우에는 <span class="tag warn">사람검수 필요</span></li>
             <li><span class="tag ok">예외</span> KC 인증을 받은 비비탄총, 어린이용 너프건과 같은 장난감 총은 예외된다. 단, 비비탄총 중에서 19금으로 분류되는 상품은 판매불가로 분류된다.</li>
@@ -598,7 +608,7 @@
 
       <article class="item" data-key="image-1">
         <div class="itemHead">
-          <h3>상품이미지 내 텍스트 또는 테두리 사용</h3>
+          <h3>상품이미지 내 텍스트 또는 테두리 사용 (대표이미지만 적용)</h3>
           <div class="itemHeadRight">
             <button class="deleteBtn" hidden>삭제</button>
           </div>
@@ -803,6 +813,35 @@
     document.querySelectorAll('.catLabel').forEach(confirmOnEnter);
     search.addEventListener('input', applyFilter);
 
+    function hexFromComputed(el){
+      var bg = getComputedStyle(el).backgroundColor;
+      var m = bg.match(/\d+/g);
+      if (!m) return '#2b3f6b';
+      return '#' + m.slice(0, 3).map(function(n){ return ('0' + parseInt(n, 10).toString(16)).slice(-2); }).join('');
+    }
+
+    function wireDotPicker(dotEl){
+      if (dotEl.querySelector('.dotPicker')) return;
+      var picker = document.createElement('input');
+      picker.type = 'color';
+      picker.className = 'dotPicker';
+      picker.value = hexFromComputed(dotEl);
+      picker.tabIndex = -1;
+      dotEl.appendChild(picker);
+      picker.addEventListener('input', function(){
+        var catEl = dotEl.closest('[data-cat]');
+        var cat = catEl ? catEl.dataset.cat : null;
+        if (!cat) return;
+        document.querySelectorAll('[data-cat="' + cat + '"] .dot').forEach(function(d){
+          d.style.setProperty('--dot', picker.value);
+        });
+      });
+    }
+    function wireDotPickersIn(scope){
+      scope.querySelectorAll('.tab .dot, .catPanel > h2 .dot').forEach(wireDotPicker);
+    }
+    wireDotPickersIn(document);
+
     function updateCounts(){
       var total = 0;
       getPanels().forEach(function(panel){
@@ -873,6 +912,7 @@
         '<span class="count">0</span>';
       addCatBtn.parentNode.insertBefore(tab, addCatBtn);
       wireTab(tab);
+      wireDotPicker(tab.querySelector('.dot'));
 
       var panel = document.createElement('section');
       panel.className = 'catPanel';
@@ -884,6 +924,7 @@
       noResultsEl.parentNode.insertBefore(panel, noResultsEl);
       wireAddItemBtn(panel.querySelector('.addItemBtn'));
       confirmOnEnter(panel.querySelector('.catLabel'));
+      wireDotPicker(panel.querySelector('h2 .dot'));
 
       updateCounts();
       setActiveTab(key);
@@ -999,6 +1040,38 @@
       }
     }
     saveBtn.addEventListener('click', doSave);
+
+    function insertImageAtCaret(dataUrl){
+      var img = document.createElement('img');
+      img.src = dataUrl;
+      var sel = window.getSelection();
+      if (sel && sel.rangeCount > 0){
+        var range = sel.getRangeAt(0);
+        range.deleteContents();
+        range.insertNode(img);
+        range.setStartAfter(img);
+        range.setEndAfter(img);
+        sel.removeAllRanges();
+        sel.addRange(range);
+      }
+    }
+
+    document.addEventListener('paste', function(e){
+      var body = e.target.closest && e.target.closest('.itemBody');
+      if (!body || body.getAttribute('contenteditable') !== 'true') return;
+      var items = (e.clipboardData || window.clipboardData || {}).items;
+      if (!items) return;
+      for (var i = 0; i < items.length; i++){
+        if (items[i].type.indexOf('image/') === 0){
+          e.preventDefault();
+          var file = items[i].getAsFile();
+          var reader = new FileReader();
+          reader.onload = function(ev){ insertImageAtCaret(ev.target.result); };
+          reader.readAsDataURL(file);
+          return;
+        }
+      }
+    });
 
     updateCounts();
     setActiveTab('all');
