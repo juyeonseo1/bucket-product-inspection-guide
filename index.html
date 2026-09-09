@@ -1028,7 +1028,7 @@
       document.querySelectorAll('.sec .headText, .secBody, .navItem:not([data-cat="all"]) .navLabel, .project .catTitle').forEach(function(el){
         el.setAttribute('contenteditable', on ? 'true' : 'false');
       });
-      document.querySelectorAll('.secDel, .addSecBtn').forEach(function(el){ el.hidden = !on; });
+      document.querySelectorAll('.secDel, .addSecBtn, #addCatBtn').forEach(function(el){ el.hidden = !on; });
       layout.classList.toggle('editing', on);
     }
 
